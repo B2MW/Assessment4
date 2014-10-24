@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "DogsViewController.h"
 #import "Owner.h"
 
 @interface ViewController () <UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate>
@@ -29,6 +30,7 @@
 
     [self loadDogOwners];
     [self checkForDefaultLoad];
+    [self loadDefaultColor];
 }
 
 #pragma mark - UITableView Delegate Methods
@@ -51,24 +53,32 @@
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     //TODO: SAVE USER'S DEFAULT COLOR PREFERENCE USING THE CONDITIONAL BELOW
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSData *defaultColor = [NSData data];
+
 
     if (buttonIndex == 0)
     {
         self.navigationController.navigationBar.tintColor = [UIColor purpleColor];
+       defaultColor = [NSKeyedArchiver archivedDataWithRootObject:[UIColor purpleColor]];
     }
     else if (buttonIndex == 1)
     {
         self.navigationController.navigationBar.tintColor = [UIColor blueColor];
+        defaultColor = [NSKeyedArchiver archivedDataWithRootObject:[UIColor blueColor]];
     }
     else if (buttonIndex == 2)
     {
         self.navigationController.navigationBar.tintColor = [UIColor orangeColor];
+        defaultColor = [NSKeyedArchiver archivedDataWithRootObject:[UIColor orangeColor]];
     }
     else if (buttonIndex == 3)
     {
         self.navigationController.navigationBar.tintColor = [UIColor greenColor];
+        defaultColor = [NSKeyedArchiver archivedDataWithRootObject:[UIColor greenColor]];
     }
 
+    [userDefaults setObject:defaultColor forKey:@"DefaultColor"];
 }
 
 //METHOD FOR PRESENTING USER'S COLOR PREFERENCE
@@ -81,6 +91,16 @@
                                           otherButtonTitles:@"Purple", @"Blue", @"Orange", @"Green", nil];
     self.colorAlert.tag = 1;
     [self.colorAlert show];
+}
+
+-(void)loadDefaultColor
+{
+    NSData *colorData = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultColor"];
+
+    if (colorData != nil) {
+        UIColor *color = [NSKeyedUnarchiver unarchiveObjectWithData:colorData];
+        self.navigationController.navigationBar.tintColor = color;
+    }
 }
 
 -(void)getDogOwners
@@ -130,6 +150,12 @@
     {
         [self getDogOwners];
     }
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(UITableViewCell *)cell
+{
+    DogsViewController *viewController = [segue destinationViewController];
+    viewController.owner = [self.owners objectAtIndex:[self.myTableView indexPathForSelectedRow].row];
 }
 
 @end

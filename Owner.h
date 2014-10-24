@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+@class Dog;
 
 @interface Owner : NSManagedObject
 
@@ -18,8 +19,8 @@
 
 @interface Owner (CoreDataGeneratedAccessors)
 
-- (void)addDogObject:(NSManagedObject *)value;
-- (void)removeDogObject:(NSManagedObject *)value;
+- (void)addDogObject:(Dog *)value;
+- (void)removeDogObject:(Dog *)value;
 - (void)addDog:(NSSet *)values;
 - (void)removeDog:(NSSet *)values;
 

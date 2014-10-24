@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Owner.h"
 
 @interface AddDogViewController : UIViewController
-
+@property Owner *owner;
+@property Dog *dog;
 @end

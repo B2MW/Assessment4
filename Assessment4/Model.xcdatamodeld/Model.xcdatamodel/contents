@@ -4,11 +4,11 @@
         <attribute name="breed" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="color" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="person" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Owner" inverseName="dog" inverseEntity="Owner" syncable="YES"/>
+        <relationship name="owner" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Owner" inverseName="dog" inverseEntity="Owner" syncable="YES"/>
     </entity>
     <entity name="Owner" representedClassName="Owner" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="dog" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Dog" inverseName="person" inverseEntity="Dog" syncable="YES"/>
+        <relationship name="dog" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Dog" inverseName="owner" inverseEntity="Dog" syncable="YES"/>
     </entity>
     <elements>
         <element name="Owner" positionX="-63" positionY="-18" width="128" height="73"/>
