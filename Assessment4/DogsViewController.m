@@ -19,21 +19,34 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"My Dogs";
+    self.title = @"Dogs";
 }
 
 #pragma mark - UITableView Delegate Methods
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    //TODO: UPDATE THIS ACCORDINGLY
     return 1;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"dogCell"];
-
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: @"dogCell"];
+    //TODO: UPDATE THIS ACCORDINGLY
     return cell;
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString: @"AddDogSegue"])
+    {
+
+    }
+    else
+    {
+
+    }
 }
 
 @end

@@ -10,4 +10,8 @@
 
 @interface ViewController : UIViewController
 
+@property NSManagedObjectContext *managedObjectContext;
+
+
+
 @end
