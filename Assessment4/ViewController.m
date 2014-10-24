@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "Owner.h"
 
 @interface ViewController () <UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate>
 
@@ -14,7 +15,8 @@
 
 @property UIAlertView *addAlert;
 @property UIAlertView *colorAlert;
-//@property
+@property NSArray *owners;
+@property NSNumber *jsonOwnersLoaded;
 @end
 
 @implementation ViewController
@@ -23,20 +25,24 @@
 {
     [super viewDidLoad];
     self.title = @"Dog Owners";
+    self.owners = [NSArray array];
+
+    [self loadDogOwners];
+    [self checkForDefaultLoad];
 }
 
 #pragma mark - UITableView Delegate Methods
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    //TODO: UPDATE THIS ACCORDINGLY
-    return 1;
+    return self.owners.count;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: @"myCell"];
-    //TODO: UPDATE THIS ACCORDINGLY
+    Owner *owner = [self.owners objectAtIndex:indexPath.row];
+    cell.textLabel.text = owner.name;
     return cell;
 }
 
@@ -83,18 +89,17 @@
     NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
 
     [NSURLConnection sendAsynchronousRequest:urlRequest queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-        NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&connectionError];
+        NSArray *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&connectionError];
 
-        for (NSDictionary *character in json) {
+        for (NSArray *owner in json) {
             NSManagedObject *newOwner = [NSEntityDescription insertNewObjectForEntityForName:@"Owner" inManagedObjectContext:self.managedObjectContext];
 
-            [newCharacter setValue:[character objectForKey:@"actor"] forKey:@"actor"];
-            [newCharacter setValue:[character objectForKey:@"passenger"] forKey:@"passenger"];
+            [newOwner setValue:owner forKey:@"name"];
             [self.managedObjectContext save:nil];
 
-            NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Character"];
-            self.characters = [self.managedObjectContext executeFetchRequest:request error:nil];
-            [self.tableView reloadData];
+            NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Owner"];
+            self.owners = [self.managedObjectContext executeFetchRequest:request error:nil];
+            [self.myTableView reloadData];
         }
 
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -107,12 +112,24 @@
 
 -(void)loadDogOwners
 {
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Owner"];
+    NSSortDescriptor *byOwnerName = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
 
+    request.sortDescriptors = [NSArray arrayWithObjects:byOwnerName, nil];
+
+    self.owners = [self.managedObjectContext executeFetchRequest:request error:nil];
+    [self.myTableView reloadData];
 }
 
--(void)saveDogOwners
+- (void)checkForDefaultLoad
 {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    self.jsonOwnersLoaded = [userDefaults objectForKey:@"DefaultsLoaded"];
 
+    if (!(self.jsonOwnersLoaded.integerValue == 1))
+    {
+        [self getDogOwners];
+    }
 }
 
 @end
