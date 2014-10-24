@@ -113,11 +113,6 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="TH6-Yu-G9j">
-                        <barButtonItem key="leftBarButtonItem" systemItem="edit" id="683-cT-PGu">
-                            <connections>
-                                <action selector="enterEditMode:" destination="szN-L8-HWB" id="IAR-Em-ueG"/>
-                            </connections>
-                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="bWi-5V-qux">
                             <connections>
                                 <segue destination="Iyy-aM-B6A" kind="presentation" identifier="AddDogSegue" id="XyB-YK-gAB"/>
@@ -126,7 +121,6 @@
                     </navigationItem>
                     <connections>
                         <outlet property="dogsTableView" destination="7Le-0Z-VLI" id="rLc-xQ-hWq"/>
-                        <outlet property="editButton" destination="683-cT-PGu" id="9Yo-RR-gFe"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OGG-ia-GSR" userLabel="First Responder" sceneMemberID="firstResponder"/>
