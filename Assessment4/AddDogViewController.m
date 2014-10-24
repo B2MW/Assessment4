@@ -8,6 +8,7 @@
 
 #import "AddDogViewController.h"
 #import "AppDelegate.h"
+#import "Dog.h"
 
 @interface AddDogViewController ()
 
@@ -39,11 +40,20 @@
 
 - (IBAction)onPressedUpdateDog:(UIButton *)sender
 {
-    if (self.nameTextField != nil && self.breedTextField != nil && self.colorTextField != nil)
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+
+    if (self.dog != nil)
     {
-        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        [self.dog setValue:self.nameTextField.text forKey:@"name"];
+        [self.dog setValue:self.breedTextField.text forKey:@"breed"];
+        [self.dog setValue:self.colorTextField.text forKey:@"color"];
+        [self.dog setValue:self.owner forKey:@"owner"];
+
+        [appDelegate.managedObjectContext save:nil];
+    }
+    else if (self.nameTextField != nil && self.breedTextField != nil && self.colorTextField != nil)
+    {
         NSManagedObject *newDog = [NSEntityDescription insertNewObjectForEntityForName:@"Dog" inManagedObjectContext:appDelegate.managedObjectContext];
-//        NSManagedObject *owner = self.owner;
 
         [newDog setValue:self.nameTextField.text forKey:@"name"];
         [newDog setValue:self.breedTextField.text forKey:@"breed"];
